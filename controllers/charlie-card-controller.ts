@@ -89,7 +89,7 @@ export default class CharlieCardController implements CharlieCardControllerI {
      * on whether deleting a user was successful or not
      */
     deleteCard = (req: Request, res: Response) =>
-        CharlieCardController.charlieCardDao.deleteCard(req.params.cardId).then(status => res.json(status));
+        CharlieCardController.charlieCardDao.deleteCard(req.params.cardId).then(status => res.send(status));
 
 
     /**

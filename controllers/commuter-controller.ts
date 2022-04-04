@@ -98,7 +98,7 @@ export default class CommuterController implements CommuterControllerI {
      * on whether deleting a user was successful or not
      */
     deleteCommuter = (req: Request, res: Response) =>
-        CommuterController.commuterDao.deleteCommuter(req.params.cid).then(status => res.json(status));
+        CommuterController.commuterDao.deleteCommuter(req.params.cid).then(status => res.send(status));
 
 
     /**
