@@ -8,7 +8,7 @@ export default interface CharlieCard {
     _id?: mongoose.Schema.Types.ObjectId,
     accountNumber: string,
     cardUser: Commuter,
-    currentAmount: Number,
+    currentAmount: number,
     dateCreated: Date
 };
 

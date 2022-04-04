@@ -1,5 +1,5 @@
 /**
- * @file Implements mongoose model to CRUD documents in the users collection.
+ * @file Implements mongoose model to CRUD documents in the cards collection.
  */
 import mongoose from "mongoose";
 import CharlieCardSchema from "./charlie-card-schema";

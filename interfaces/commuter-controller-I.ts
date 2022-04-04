@@ -9,5 +9,7 @@ export default interface CommuterControllerI {
     deleteCommuter(req: Request, res: Response): void;
     findCommuterById(req: Request, res: Response): void;
     findAllCommuters (req: Request, res: Response): void;
+    deleteCommutersByUsername(req: Request, res: Response): void;
+
 };
 

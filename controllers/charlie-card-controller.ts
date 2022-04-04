@@ -1,11 +1,11 @@
 /**
  * @file Controller RESTful Web service API for users resource
  */
-import UserDao from "../daos/commuter-dao";
-import Commuter from "../models/commuter";
 import {Express, Request, Response} from "express";
-import CommuterControllerI from "../interfaces/commuter-controller-I";
-import CommuterDao from "../daos/commuter-dao";
+import CharlieCardDao from "../daos/charlie-card-dao";
+import CharlieCardControllerI from "../interfaces/charlie-card-controller-I";
+import CharlieCardModel from "../mongoose/charlie-card-model";
+import CharlieCard from "../models/charlie-card";
 
 /**
  * @class CommuterController Implements RESTful Web service API for users resource.
@@ -22,9 +22,9 @@ import CommuterDao from "../daos/commuter-dao";
  * @property {CommuterController} commuterController Singleton controller implementing
  * RESTful Web service API
  */
-export default class CommuterController implements CommuterControllerI {
-    private static commuterDao: CommuterDao = CommuterDao.getInstance();
-    private static commuterController: CommuterController | null = null;
+export default class CharlieCardController implements CharlieCardControllerI {
+    private static charlieCardDao: CharlieCardDao = CharlieCardDao.getInstance();
+    private static charlieCardController: CharlieCardController | null = null;
 
     /**
      * Creates singleton controller instance
@@ -32,31 +32,22 @@ export default class CommuterController implements CommuterControllerI {
      * API
      * @returns CommuterController
      */
-    public static getInstance = (app: Express): CommuterController => {
-        if(CommuterController.commuterController === null) {
-            CommuterController.commuterController = new CommuterController();
+    public static getInstance = (app: Express): CharlieCardController => {
+        if(CharlieCardController.charlieCardController === null) {
+            CharlieCardController.charlieCardController = new CharlieCardController();
 
-            app.post("/api/commuters", CommuterController.commuterController.createCommuter);
-            app.get("/api/commuters", CommuterController.commuterController.findAllCommuters);
-            app.get("/api/commuters/:cid", CommuterController.commuterController.findCommuterById);
-            app.put("/api/commuters/:cid", CommuterController.commuterController.updateCommuter);
-            app.delete("/api/commuters/:cid", CommuterController.commuterController.deleteCommuter);
-            app.delete("/api/users/username/:username/delete", CommuterController.commuterController.deleteCommutersByUsername);
+            app.post("/api/cards", CharlieCardController.charlieCardController.createCard);
+            app.put("/api/card/:cid", CharlieCardController.charlieCardController.updateCard);
+            app.delete("/api/card/:cid", CharlieCardController.charlieCardController.deleteCard);
+            app.get("/api/card/:cid", CharlieCardController.charlieCardController.findCardById);
+            app.put("/api/users/:uid/useCard/:cid", CharlieCardController.charlieCardController.userTakesARide);
         }
 
-        return CommuterController.commuterController;
+        return CharlieCardController.charlieCardController;
     }
 
     private constructor() {}
 
-    /**
-     * Retrieves all users from the database and returns an array of users.
-     * @param {Request} req Represents request from client
-     * @param {Response} res Represents response to client, including the
-     * body formatted as JSON arrays containing the user objects
-     */
-    findAllCommuters = (req: Request, res: Response) =>
-        CommuterController.commuterDao.findAllCommuters().then((commuters: Commuter[]) => res.json(commuters));
 
     /**
      * Retrieves the user by their primary key
@@ -65,8 +56,8 @@ export default class CommuterController implements CommuterControllerI {
      * @param {Response} res Represents response to client, including the
      * body formatted as JSON containing the user that matches the user ID
      */
-    findCommuterById = (req: Request, res: Response) =>
-        CommuterController.commuterDao.findCommuterById(req.params.cid).then((commuter: Commuter) => res.json(commuter));
+    findCardById = (req: Request, res: Response) =>
+        CharlieCardController.charlieCardDao.findCardById(req.params.cardId).then((card: CharlieCard) => res.json(card));
 
     /**
      * Creates a new user instance
@@ -77,8 +68,8 @@ export default class CommuterController implements CommuterControllerI {
      * body formatted as JSON containing the new user that was inserted in the
      * database
      */
-    createCommuter = (req: Request, res: Response) =>
-        CommuterController.commuterDao.createCommuter(req.body).then((commuter: Commuter) => res.json(commuter));
+    createCard = (req: Request, res: Response) =>
+        CharlieCardController.charlieCardDao.createCard(req.body).then((card: CharlieCard) => res.json(card));
 
     /**
      * Modifies an existing user instance
@@ -87,8 +78,8 @@ export default class CommuterController implements CommuterControllerI {
      * @param {Response} res Represents response to client, including status
      * on whether updating a user was successful or not
      */
-    updateCommuter = (req: Request, res: Response) =>
-        CommuterController.commuterDao.updateCommuter(req.params.cid, req.body).then(status => res.json(status));
+    updateCard = (req: Request, res: Response) =>
+        CharlieCardController.charlieCardDao.updateCard(req.params.cardId, req.body).then(status => res.json(status));
 
     /**
      * Removes a user instance from the database
@@ -97,8 +88,8 @@ export default class CommuterController implements CommuterControllerI {
      * @param {Response} res Represents response to client, including status
      * on whether deleting a user was successful or not
      */
-    deleteCommuter = (req: Request, res: Response) =>
-        CommuterController.commuterDao.deleteCommuter(req.params.cid).then(status => res.json(status));
+    deleteCard = (req: Request, res: Response) =>
+        CharlieCardController.charlieCardDao.deleteCard(req.params.cardId).then(status => res.json(status));
 
 
     /**
@@ -108,8 +99,7 @@ export default class CommuterController implements CommuterControllerI {
      * @param {Response} res Represents response to client, including status
      * on whether deleting a user was successful or not
      */
-    deleteCommutersByUsername = (req: Request, res: Response) => {
-        CommuterController.commuterDao.deleteCommutersByUsername(req.params.username).then(status => res.send(status));
+    userTakesARide = (req: Request, res: Response) => {
+        CharlieCardController.charlieCardDao.userTakesARide(req.params.cardId, req.body).then(status => res.json(status));
     }
 }
-

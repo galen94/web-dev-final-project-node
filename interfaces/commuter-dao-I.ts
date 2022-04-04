@@ -14,4 +14,5 @@ export default interface CommuterDaoI {
     deleteCommuter(cid: string): Promise<any>;
     findCommuterById(cid: string): Promise<Commuter>;
     findAllCommuters(): Promise<Commuter[]>;
+    deleteCommutersByUsername(username: string): Promise<any>;
 }

@@ -5,10 +5,8 @@ import {Request, Response} from "express";
  */
 export default interface CharlieCardControllerI {
     userTakesARide (req: Request, res: Response): void;
-    userSetsCardAmount (req: Request, res: Response): void;
     createCard (req: Request, res: Response): void;
     updateCard (req: Request, res: Response): void;
     deleteCard (req: Request, res: Response): void;
     findCardById (req: Request, res: Response): void;
-    findCardUserById (req: Request, res: Response): void;
 };
