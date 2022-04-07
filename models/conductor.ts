@@ -9,8 +9,7 @@ export default interface Conductor {
     password: string,
     name: string,
     email: string,
-    yearsAsConductor: string,
+    yearsAsConductor: number,
     currentRouteToConduct: string,
     favoriteRouteToConduct: string,
-    favoritedByUsers: Array<string>,
 }

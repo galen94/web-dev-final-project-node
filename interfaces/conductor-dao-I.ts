@@ -11,12 +11,4 @@ export default interface ConductorDaoI {
     findConductorById(coid: string): Promise<Conductor>;
     findAllConductors(): Promise<Conductor[]>;
     deleteConductorsByUsername(username: string): Promise<any>;
-
-    // TODO +Galen pls tell me if these are horribly wrong lol.
-    // updateCurrentRoute(route: string): Promise<any>;
-    // deleteCurrentRoute(route: string): Promise<any>;
-    // findConductorsCurrentRoute(coid: string): Promise<any>;
-    // updateFavoriteRoute(route: string): Promise<any>;
-    // deleteFavoriteRoute(route: string): Promise<any>;
-    // findConductorsFavoriteRoute(coid: string): Promise<any>;
 }
