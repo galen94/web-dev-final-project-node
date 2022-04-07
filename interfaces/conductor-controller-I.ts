@@ -11,10 +11,4 @@ export default interface ConductorControllerI {
     findConductorById(req: Request, res: Response): void;
     findAllConductors(req: Request, res: Response): void;
     deleteConductorsByUsername(req: Request, res: Response): void;
-    // updateCurrentRoute(req: Request, res: Response): void;
-    // deleteCurrentRoute(req: Request, res: Response): void;
-    // findConductorsCurrentRoute(req: Request, res: Response): void;
-    // updateFavoriteRoute(req: Request, res: Response): void;
-    // deleteFavoriteRoute(req: Request, res: Response): void;
-    // findConductorsFavoriteRoute(req: Request, res: Response): void;
 };
