@@ -89,7 +89,7 @@ export default class AdminController implements AdminControllerI {
      * on whether updating a admin was successful or not
      */
     updateAdmin = (req: Request, res: Response) =>
-        AdminController.adminDao.updateAdmin(req.params.aid, req.body).then(status => res.send(status));
+        AdminController.adminDao.updateAdmin(req.params.aid, req.body).then(status => res.json(status));
 
     /**
      * Removes an admin instance from the database

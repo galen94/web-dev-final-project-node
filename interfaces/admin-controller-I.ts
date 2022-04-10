@@ -1,3 +1,4 @@
+// @ts-ignore
 import {Request, Response} from "express";
 /**
  * @file Declares API for admins resource

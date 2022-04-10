@@ -87,7 +87,7 @@ export default class ConductorController implements ConductorControllerI {
      * on whether updating a conductor was successful or not
      */
     updateConductor = (req: Request, res: Response) =>
-        ConductorController.conductorDao.updateConductor(req.params.coid, req.body).then(status => res.send(status));
+        ConductorController.conductorDao.updateConductor(req.params.coid, req.body).then(status => res.json(status));
 
     /**
      * Removes a conductor instance from the database
@@ -107,6 +107,6 @@ export default class ConductorController implements ConductorControllerI {
      * on whether deleting a conductor was successful or not
      */
     deleteConductorsByUsername = (req: Request, res: Response) =>
-        ConductorController.conductorDao.deleteConductorsByUsername(req.params.username).then(status => res.send(status));
+        ConductorController.conductorDao.deleteConductorsByUsername(req.params.username).then(status => res.json(status));
 
 }
