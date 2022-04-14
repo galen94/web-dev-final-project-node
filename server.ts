@@ -18,7 +18,10 @@ import express, {Request, Response} from 'express';
 import mongoose from 'mongoose';
 import cors from "cors";
 const session = require("express-session");
-// import CommuterController from './controllers/user-controller';
+
+import UserController from './controllers/user-controller';
+import FollowController from "./controllers/follow-controller";
+import AuthenticationController from "./controllers/authentication-controller";
 
 
 /**
@@ -28,7 +31,7 @@ const PROTOCOL = "mongodb+srv";
 const DB_USERNAME = process.env.DB_USERNAME;
 const DB_PASSWORD = process.env.DB_PASSWORD;
 const DB_HOST = process.env.DB_HOST;
-const DB_NAME = "WebDevProject";
+const DB_NAME = process.env.DB_NAME;
 const DB_QUERY = "retryWrites=true&w=majority";
 
 /**
@@ -49,20 +52,21 @@ app.use(cors({
     ]
 }));
 
-const SECRET = process.env.SECRET;
 let sess = {
-    secret: SECRET,
+    secret:  process.env.SECRET,
     saveUninitialized: true,
     resave: true,
     cookie: {
         secure: false,
-        sameSite: 'none'
+        sameSite: 'lax'
     }
 }
 
-if (process.env.ENVIRONMENT === 'PRODUCTION') {
+if (process.env.NODE_ENV === 'PRODUCTION') {
     app.set('trust proxy', 1) // trust first proxy
-    sess.cookie.secure = true // serve secure cookies
+    sess.cookie.secure = true; // serve secure cookies
+    sess.cookie.sameSite = 'none';
+
 }
 
 app.use(session(sess));
@@ -80,7 +84,9 @@ app.get('/', (req: Request, res: Response) => {
 /**
  * Create RESTful Web service API
  */
-//CommuterController.getInstance(app);
+UserController.getInstance(app);
+//FollowController.getInstance(app);
+AuthenticationController(app);
 
 
 /**

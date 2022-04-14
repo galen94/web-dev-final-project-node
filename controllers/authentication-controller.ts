@@ -1,5 +1,5 @@
 import {Request, Response, Express} from "express";
-import UserDao from "../daos/UserDao";
+import UserDao from "../daos/user-dao";
 
 const AuthenticationController = (app: Express) => {
 
@@ -7,14 +7,13 @@ const AuthenticationController = (app: Express) => {
 
     const login = async (req: Request, res: Response) => {
         const user = req.body;
-        const username = user.username;
-        const password = user.password;
-        console.log(password)
+        //const username = user.username;
+        //const password = user.password;
         const existingUser = await userDao
-            .findUserByUsername(username);
+            .findUserByUsername(req.body.username);
 
         if (existingUser) {
-            existingUser.password='';
+            //existingUser.password='';
             // @ts-ignore
             req.session['profile'] = existingUser;
             res.json(existingUser);
@@ -25,7 +24,7 @@ const AuthenticationController = (app: Express) => {
 
     const register = async (req: Request, res: Response) => {
         const newUser = req.body;
-        const password = newUser.password;
+        //const password = newUser.password;
 
         const existingUser = await userDao
             .findUserByUsername(req.body.username);
@@ -35,7 +34,7 @@ const AuthenticationController = (app: Express) => {
         } else {
             const insertedUser = await userDao
                 .createUser(newUser);
-            insertedUser.password = '';
+            //insertedUser.password = '';
             // @ts-ignore
             req.session['profile'] = insertedUser;
             res.json(insertedUser);
