@@ -9,11 +9,11 @@ import PostApplaud from "../models/post-applaud";
  * @class PostApplaudController Implements RESTful Web service API for applauds resource.
  * Defines the following HTTP endpoints:
  * <ul>
- *     <li>GET /api/commuters/:cid/applaudspost to retrieve all the post applauds by a user
+ *     <li>GET /api/users/:uid/applaudspost to retrieve all the post applauds by a user
  *     </li>
  *     <li>GET /api/posts/:pid/applaudspost to retrieve all users that applauds a post
  *     </li>
- *     <li>PUT /api/commuters/:cid/togglesapplaudspost/:pid to record that a user applauds a post
+ *     <li>PUT /api/users/:uid/togglesapplaudspost/:pid to record that a user applauds a post
  *     </li>
  * </ul>
  * @property {PostApplaudDao} applaudDao Singleton DAO implementing applauds CRUD operations
@@ -30,9 +30,9 @@ export default class PostApplaudController implements PostApplaudControllerI {
     public static getInstance = (app: Express): PostApplaudController => {
         if (PostApplaudController.postApplaudController === null) {
             PostApplaudController.postApplaudController = new PostApplaudController();
-            app.get("/api/commuters/:cid/applaudspost", PostApplaudController.postApplaudController.findAllPostsApplaudedByUser);
+            app.get("/api/users/:uid/applaudspost", PostApplaudController.postApplaudController.findAllPostsApplaudedByUser);
             app.get("/api/posts/:pid/applaudspost", PostApplaudController.postApplaudController.findAllUsersThatApplaudedPost);
-            app.put("/api/commuters/:cid/togglesapplaudspost/:pid", PostApplaudController.postApplaudController.userTogglesPostApplauds);
+            app.put("/api/users/:uid/togglesapplaudspost/:pid", PostApplaudController.postApplaudController.userTogglesPostApplauds);
         }
         return PostApplaudController.postApplaudController;
     }
