@@ -1,7 +1,7 @@
 import Post from "./post";
-import Commuter from "./commuter";
+import User from "./user";
 
 export default interface PostApplaud {
     post: Post,
-    applaudedBy: Commuter
+    applaudedBy: User
 }
