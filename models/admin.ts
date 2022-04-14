@@ -9,5 +9,5 @@ export default interface Admin {
     password: string,
     name: string,
     email: string,
-    yearsAtMBTA: string,
+    yearsAtMBTA: number,
 }

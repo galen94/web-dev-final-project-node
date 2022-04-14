@@ -1,22 +1,21 @@
 /**
- * @file Controller RESTful Web service API for users resource
+ * @file Controller RESTful Web service API for commuters resource
  */
-import UserDao from "../daos/commuter-dao";
 import Commuter from "../models/commuter";
 import {Express, Request, Response} from "express";
 import CommuterControllerI from "../interfaces/commuter-controller-I";
 import CommuterDao from "../daos/commuter-dao";
 
 /**
- * @class CommuterController Implements RESTful Web service API for users resource.
+ * @class CommuterController Implements RESTful Web service API for commuters resource.
  * Defines the following HTTP endpoints:
  * <ul>
- *     <li>POST /api/users to create a new user instance</li>
- *     <li>GET /api/users to retrieve all the user instances</li>
- *     <li>GET /api/users/:uid to retrieve an individual user instance </li>
- *     <li>PUT /api/users/:uid to modify an individual user instance </li>
- *     <li>DELETE /api/users/:uid to remove a particular user instance</li>
- *     <li>DELETE /api/users to remove all the user instances</li>
+ *     <li>POST /api/commuters to create a new user instance</li>
+ *     <li>GET /api/commuters to retrieve all the commuters instances</li>
+ *     <li>GET /api/commuters/:uid to retrieve an individual commuters instance </li>
+ *     <li>PUT /api/commuters/:uid to modify an individual commuters instance </li>
+ *     <li>DELETE /api/commuters/:uid to remove a particular commuters instance</li>
+ *     <li>DELETE /api/commuters to remove all the commuters instances</li>
  * </ul>
  * @property {CommuterDao} commuterDao Singleton DAO implementing user CRUD operations
  * @property {CommuterController} commuterController Singleton controller implementing
@@ -50,10 +49,10 @@ export default class CommuterController implements CommuterControllerI {
     private constructor() {}
 
     /**
-     * Retrieves all users from the database and returns an array of users.
+     * Retrieves all commuters from the database and returns an array of commuters.
      * @param {Request} req Represents request from client
      * @param {Response} res Represents response to client, including the
-     * body formatted as JSON arrays containing the user objects
+     * body formatted as JSON arrays containing the commuters objects
      */
     findAllCommuters = (req: Request, res: Response) =>
         CommuterController.commuterDao.findAllCommuters().then((commuters: Commuter[]) => res.json(commuters));
