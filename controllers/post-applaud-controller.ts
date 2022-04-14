@@ -22,6 +22,8 @@ import PostApplaud from "../models/post-applaud";
  */
 export default class PostApplaudController implements PostApplaudControllerI {
     private static postApplaudDao: PostApplaudDao = PostApplaudDao.getInstance();
+    //TODO postDao stuff ? ts ignore for now
+    // @ts-ignore
     private static postDao: PostDao = PostDao.getInstance();
     private static postApplaudController: PostApplaudController | null = null;
 
