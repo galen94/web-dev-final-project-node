@@ -8,6 +8,7 @@
  * as in a user likes a post
  * @property {Post} post post being liked
  * @property {Commuter} likedBy User liking the post
+ * @property {Commuter} applaudedBy User applauding the post
  */
 export default interface Post {
 
