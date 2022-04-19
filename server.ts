@@ -20,7 +20,8 @@ import cors from "cors";
 const session = require("express-session");
 
 import UserController from './controllers/user-controller';
-import FollowController from "./controllers/follow-controller";
+import PinnedStopController from "./controllers/pinned-stops-controller";
+//import FollowController from "./controllers/follow-controller";
 import AuthenticationController from "./controllers/authentication-controller";
 
 
@@ -87,6 +88,7 @@ app.get('/', (req: Request, res: Response) => {
 UserController.getInstance(app);
 //FollowController.getInstance(app);
 AuthenticationController(app);
+PinnedStopController.getInstance(app);
 
 
 /**
