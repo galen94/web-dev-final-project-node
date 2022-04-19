@@ -59,10 +59,29 @@ const AuthenticationController = (app: Express) => {
         res.sendStatus(200);
     }
 
+    const reset = async (req: Request, res: Response) => {
+        const newUser = req.body;
+        const existingUser = await userDao
+            .findUserById(req.body._id);
+        if (existingUser) {
+            const updatedUser = await userDao
+                .updateUser(existingUser._id,newUser)
+            //resetUser.password = '';
+            // @ts-ignore
+            req.session['profile'] = updatedUser;
+            res.json(updatedUser);
+
+        } else {
+            res.sendStatus(403);
+        }
+    }
+
+
     app.post("/api/auth/login", login);
     app.post("/api/auth/register", register);
     app.post("/api/auth/profile", profile);
     app.post("/api/auth/logout", logout);
+    app.post("/api/auth/reset", reset);
 }
 
 export default AuthenticationController;
