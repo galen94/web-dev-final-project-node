@@ -5,6 +5,7 @@
 import UserModel from "../mongoose/user-model";
 import User from "../models/user";
 import UserDaoI from "../interfaces/user-dao-I";
+import {Request, Response} from "express";
 
 /**
  * @class UserDao Implements Data Access Object managing data storage
@@ -28,6 +29,11 @@ export default class UserDao implements UserDaoI {
     private constructor() {}
 
     /**
+     * Uses UserModel to retrieve all users from users collection
+     */
+    findAllUsers = async (): Promise<any> => {
+        return UserModel.find();}
+    /**
      * Uses UserModel to retrieve single user document from users collection
      * @param {string} uid User's primary key
      * @returns Promise To be notified when user is retrieved from the database
@@ -42,8 +48,9 @@ export default class UserDao implements UserDaoI {
      * @param {string} username User's username
      * @returns Promise To be notified when user is retrieved from the database
      */
-    findUserByUsername = async (username: string): Promise<any> =>
-        UserModel.findOne({username: username});
+    findUserByUsername = async (username: string): Promise<any> => {
+        return UserModel.findOne({username: username});
+    }
 
     /**
      * Inserts user instance into the database
@@ -73,4 +80,3 @@ export default class UserDao implements UserDaoI {
         return UserModel.deleteOne({_id: uid});
     }
 }
-

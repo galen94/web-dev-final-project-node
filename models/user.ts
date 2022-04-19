@@ -15,7 +15,7 @@ export default interface User {
     dateOfBirth?: Date,
     homeStop?: string
     charlieCard?: CharlieCard,
-    yearsAtMBTA?: number,
+    joinedDate?: Date,
     currentRouteConducting?: string,
     favoriteRouteToConduct?: string,
     jobTitle?: string

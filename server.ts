@@ -13,7 +13,7 @@
  * Connects to a remote MongoDB instance hosted on the Atlas cloud database
  * service
  */
-import 'dotenv/config'
+import 'dotenv/config';
 import express, {Request, Response} from 'express';
 import mongoose from 'mongoose';
 import cors from "cors";

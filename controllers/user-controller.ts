@@ -35,6 +35,7 @@ export default class UserController implements UserControllerI {
             UserController.userController = new UserController();
 
             app.post("/api/users", UserController.userController.createUser);
+            app.get("/api/users", UserController.userController.findAllUsers);
             app.get("/api/users/:uid", UserController.userController.findUserById);
             app.put("/api/users/:uid", UserController.userController.updateUser);
             app.delete("/api/users/:uid", UserController.userController.deleteUser);
@@ -56,6 +57,10 @@ export default class UserController implements UserControllerI {
     findUserById = (req: Request, res: Response) =>
         UserController.userDao.findUserById(req.params.uid).then((user: User) => res.json(user));
 
+    findAllUsers = (req: Request, res: Response) => {
+        UserController.userDao.findAllUsers().then((users: User[]) => res.json(users));
+    }
+
     /**
      * Creates a new user instance
      * @param {Request} req Represents request from client, including body
@@ -76,7 +81,7 @@ export default class UserController implements UserControllerI {
      * on whether updating a user was successful or not
      */
     updateUser = (req: Request, res: Response) =>
-        UserController.userDao.updateUser(req.params.uid, req.body).then(status => res.send(status));
+        UserController.userDao.updateUser(req.params.uid, req.body).then((user: User) => res.json(user));
 
     /**
      * Removes a user instance from the database
@@ -99,4 +104,3 @@ export default class UserController implements UserControllerI {
         UserController.userDao.findUserByUsername(req.params.username).then((user: User) => res.json(user));
     }
 }
-

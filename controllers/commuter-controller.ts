@@ -21,6 +21,7 @@ import CommuterDao from "../daos/commuter-dao";
  * @property {CommuterController} commuterController Singleton controller implementing
  * RESTful Web service API
  */
+
 export default class CommuterController implements CommuterControllerI {
     private static commuterDao: CommuterDao = CommuterDao.getInstance();
     private static commuterController: CommuterController | null = null;
@@ -111,4 +112,3 @@ export default class CommuterController implements CommuterControllerI {
         CommuterController.commuterDao.deleteCommutersByUsername(req.params.username).then(status => res.send(status));
     }
 }
-

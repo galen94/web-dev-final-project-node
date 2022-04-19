@@ -1,7 +1,7 @@
 enum UserRole {
-    Admin = "admin",
-    Conductor = "conductor",
-    Commuter = "commuter"
-};
+    Admin = "Admin",
+    Conductor = "Conductor",
+    Commuter = "Commuter"
+}
 
 export default UserRole;

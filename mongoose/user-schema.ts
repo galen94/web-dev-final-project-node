@@ -9,16 +9,14 @@ const UserSchema = new mongoose.Schema<User>({
     password: {type: String, required: true},
     name: {type: String, required: true},
     email: {type: String, required: true},
-    userRole: {type: String, enum: ["admin", "conductor", "commuter"]},
+    userRole: {type: String, enum: ["Admin", "Conductor", "Commuter"]},
     dateOfBirth: Date,
     homeStop: {type: String},
     charlieCard: {type: Schema.Types.ObjectId, ref: "CharlieCardModel"},
-    yearsAtMBTA: Number,
+    joinedDate: Date,
     currentRouteConducting: String,
     favoriteRouteToConduct: String,
     jobTitle: String
 }, {collection: 'users'});
 
 export default UserSchema;
-
-

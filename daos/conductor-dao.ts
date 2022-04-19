@@ -49,16 +49,6 @@ export default class ConductorDao implements ConductorDaoI {
         //@ts-ignore
         ConductorModel.find();
 
-    /**
-     * Updates message with new values in database
-     * @param {string} coid Primary key of message to be modified
-     * @param {string} route Route to be updated.
-     * @param {Message} message Message object containing properties and their new values
-     * @returns Promise To be notified when message is updated in the database
-     */
-    // updateCurrentRoute = async (coid: string, route: string): Promise<any> =>
-    //     ConductorModel.updateOne(
-    //         {_id: coid},
-    //         {currentRouteToConduct: route},
-    //     );
+    updateLikes = async (coid: string): Promise<any> =>
+        ConductorModel.
 }
