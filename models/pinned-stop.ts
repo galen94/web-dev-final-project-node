@@ -2,15 +2,16 @@
  * @file Declares PinnedStop data type representing relationship between
  * users and stops, as in user pins a stop
  */
-import Commuter from "../models/commuter";
+import User from "../models/user";
 
 /**
- * @typedef PinnedStop Represents pinned relationship between a commuter and a stop,
- * as in a commuter pins a stop
+ * @typedef PinnedStop Represents pinned relationship between a user and a stop,
+ * as in a user pins a stop
  * @property {string} stop
- * @property {Commuter} pinnedBy
+ * @property {User} pinnedBy
  */
 export default interface PinnedStop {
     stop: string,
-    pinnedBy: Commuter
+    route: string,
+    pinnedBy: User
 };
