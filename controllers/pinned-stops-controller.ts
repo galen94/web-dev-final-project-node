@@ -5,6 +5,7 @@ import {Express, Request, Response} from "express";
 import PinnedStopsControllerI from "../interfaces/pinned-stops-controller-I";
 import PinnedStopDao from "../daos/pinned-stops-dao";
 import PinnedStop from "../models/pinned-stop";
+import PinnedStopModel from "../mongoose/pinned-stop-model";
 
 /**
  * @class UserController Implements RESTful Web service API for users resource.
@@ -36,7 +37,8 @@ export default class PinnedStopsController implements PinnedStopsControllerI {
 
             app.get("/api/users/:uid/pins", PinnedStopsController.pinnedStopsController.findAllPinnedStopsByUser);
             app.get("/api/pins/:pid", PinnedStopsController.pinnedStopsController.findOnePinnedStopsByUser);
-            app.post("/api/users/:uid/pins/:routeId/:stopId", PinnedStopsController.pinnedStopsController.pinStop);
+            app.get("/api/pins/:routeType/:routeId/:stopId/:userId", PinnedStopsController.pinnedStopsController.pinExistsAlready)
+            app.post("/api/users/:uid/pins/:routeType/:routeId/:routeName/:stopId/:stopName", PinnedStopsController.pinnedStopsController.pinStop);
             app.delete("/api/pins/:pid", PinnedStopsController.pinnedStopsController.unpinStop);
         }
 
@@ -99,7 +101,8 @@ export default class PinnedStopsController implements PinnedStopsControllerI {
             return;
         }
 
-        PinnedStopsController.pinnedStopDao.pinStop(req.params.routeId, req.params.stopId, userId).then((pinnedStop: PinnedStop) => res.json(pinnedStop));
+        PinnedStopsController.pinnedStopDao.pinStop(req.params.routeType, req.params.routeId, req.params.routeName,
+            req.params.stopId, req.params.stopName, userId).then((pinnedStop: PinnedStop) => res.json(pinnedStop));
 
 
     }
@@ -113,6 +116,11 @@ export default class PinnedStopsController implements PinnedStopsControllerI {
      */
     unpinStop = (req: Request, res: Response) =>
         PinnedStopsController.pinnedStopDao.unpinStop(req.params.pid).then(status => res.send(status));
+
+
+    pinExistsAlready = (req: Request, res: Response) =>
+        PinnedStopsController.pinnedStopDao.pinExistsAlready(req.params.routeType, req.params.routeId, req.params.stopId, req.params.userId)
+            .then(count => res.json(count));
 
 }
 
