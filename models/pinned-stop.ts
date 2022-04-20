@@ -11,7 +11,10 @@ import User from "../models/user";
  * @property {User} pinnedBy
  */
 export default interface PinnedStop {
-    stop: string,
-    route: string,
+    routeType: string,
+    stopId: string,
+    stopName: string,
+    routeId: string,
+    routeName: string,
     pinnedBy: User
 };
