@@ -6,6 +6,7 @@ import PinnedStop from "../models/pinned-stop";
 export default interface PinnedStopDaoI {
     findAllPinnedStopsByUser (userId: string): Promise<PinnedStop[]>;
     findOnePinnedStopsByUser (pid: string): Promise<any>;
-    pinStop (routeId: string, stopId: string, userId: string): Promise<PinnedStop>;
+    pinExistsAlready (routeType: string, routeId: string, stopId: string, userId: string): Promise<any>;
+    pinStop (routeType: string, routeId: string, routeName: string, stopId: string, stopName: string, userId: string): Promise<PinnedStop>;
     unpinStop (pid: string): Promise<any>;
 };
