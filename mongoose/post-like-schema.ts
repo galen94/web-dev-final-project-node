@@ -6,6 +6,6 @@ import PostLike from "../models/post-like";
 
 const PostLikeSchema = new mongoose.Schema<PostLike>({
     post: {type: Schema.Types.ObjectId, ref: "PostModel"},
-    likedBy: {type: Schema.Types.ObjectId, ref: "CommuterModel"},
+    likedBy: {type: Schema.Types.ObjectId, ref: "UserModel"},
 }, {collection: "postLikes"});
 export default PostLikeSchema;
