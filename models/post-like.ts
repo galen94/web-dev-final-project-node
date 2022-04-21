@@ -3,7 +3,7 @@
  * users and posts, as in user likes a post
  */
 import Post from "./post";
-import Commuter from "../models/commuter";
+import User from "../models/User";
 
 /**
  * @typedef PostLike Represents likes relationship between a user and a post,
@@ -13,5 +13,5 @@ import Commuter from "../models/commuter";
  */
 export default interface PostLike {
     post: Post,
-    likedBy: Commuter
+    likedBy: User
 };
