@@ -64,13 +64,13 @@ const AuthenticationController = (app: Express) => {
         const existingUser = await userDao
             .findUserById(req.body._id);
         if (existingUser) {
-            const updatedUser = await userDao
-                .updateUser(existingUser._id,newUser)
-            //resetUser.password = '';
+            await userDao
+                .updateUser(existingUser._id,newUser);
+            const updatedUser = await userDao.findUserById(req.body._id);
+                //resetUser.password = '';
             // @ts-ignore
             req.session['profile'] = updatedUser;
             res.json(updatedUser);
-
         } else {
             res.sendStatus(403);
         }
