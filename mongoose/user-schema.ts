@@ -12,7 +12,7 @@ const UserSchema = new mongoose.Schema<User>({
     userRole: {type: String, enum: ["Admin", "Conductor", "Commuter"]},
     dateOfBirth: Date,
     homeStop: {type: String},
-    charlieCard: {type: Schema.Types.ObjectId, ref: "CharlieCardModel"},
+    charlieCardBalance: Number,
     yearsAtMBTA: Number,
     currentRouteConducting: String,
     favoriteRouteToConduct: String,
