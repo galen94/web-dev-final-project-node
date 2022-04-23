@@ -32,6 +32,12 @@ export default class PinnedStopDao implements PinnedStopDaoI {
         return PinnedStopModel.find({_id: pid});
     }
 
+    findAllUsersWhoPinnedStop = async (sid: string): Promise<PinnedStop[]> => {
+        const users = PinnedStopModel.find({stopId: sid});
+        console.log(users)
+        return users;
+    }
+
 
     findAllPinnedStopsByUser = async (uid: string): Promise<PinnedStop[]> =>
         PinnedStopModel.find({pinnedBy: uid});

@@ -84,7 +84,7 @@ export default class PostApplaudController implements PostApplaudControllerI {
                 await postApplaudDao.userApplaudsPost(userId, pid);
                 post.stats.applauds = howManyApplaudedPost + 1;
             }
-            // await postDao.updateApplauds(pid, post.stats.applauds);
+            await postDao.updateStats(pid, post.stats.applauds);
 
             res.send(200);
         } catch (e) {
