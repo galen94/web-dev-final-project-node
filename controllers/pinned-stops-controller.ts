@@ -6,6 +6,7 @@ import PinnedStopsControllerI from "../interfaces/pinned-stops-controller-I";
 import PinnedStopDao from "../daos/pinned-stops-dao";
 import PinnedStop from "../models/pinned-stop";
 import PinnedStopModel from "../mongoose/pinned-stop-model";
+import UserDao from "../daos/user-dao";
 
 /**
  * @class UserController Implements RESTful Web service API for users resource.
@@ -23,6 +24,7 @@ import PinnedStopModel from "../mongoose/pinned-stop-model";
  */
 export default class PinnedStopsController implements PinnedStopsControllerI {
     private static pinnedStopDao: PinnedStopDao = PinnedStopDao.getInstance();
+    private static userDao: UserDao = UserDao.getInstance();
     private static pinnedStopsController: PinnedStopsController | null = null;
 
     /**
@@ -40,6 +42,7 @@ export default class PinnedStopsController implements PinnedStopsControllerI {
             app.get("/api/pins/:routeType/:routeId/:stopId/:userId", PinnedStopsController.pinnedStopsController.pinExistsAlready)
             app.post("/api/users/:uid/pins/:routeType/:routeId/:routeName/:stopId/:stopName", PinnedStopsController.pinnedStopsController.pinStop);
             app.delete("/api/pins/:pid", PinnedStopsController.pinnedStopsController.unpinStop);
+            app.get("api/stops/:sid/pins", PinnedStopsController.pinnedStopsController.findAllUsersWhoPinnedStop);
         }
 
         return PinnedStopsController.pinnedStopsController;
@@ -122,5 +125,14 @@ export default class PinnedStopsController implements PinnedStopsControllerI {
         PinnedStopsController.pinnedStopDao.pinExistsAlready(req.params.routeType, req.params.routeId, req.params.stopId, req.params.userId)
             .then(count => res.json(count));
 
+
+    findAllUsersWhoPinnedStop  = async (req: Request, res: Response) => {
+        console.log("hellllloo")
+        const stops = await PinnedStopsController.pinnedStopDao.findAllUsersWhoPinnedStop(req.params.sid);
+        console.log(stops)
+        const usersWhoPinned = stops.map(stop => stop.pinnedBy);
+        console.log(usersWhoPinned)
+        res.json(usersWhoPinned);
+    }
 }
 
