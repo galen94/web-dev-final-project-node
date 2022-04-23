@@ -2,7 +2,6 @@
  * @file Implements model to represent users.
  */
 import mongoose from "mongoose";
-import CharlieCard from "./charlie-card";
 import UserRole from "./role";
 
 export default interface User {
@@ -14,7 +13,7 @@ export default interface User {
     userRole: UserRole,
     dateOfBirth?: Date,
     homeStop?: string
-    charlieCard?: CharlieCard,
+    charlieCardBalance: number,
     yearsAtMBTA?: number,
     currentRouteConducting?: string,
     favoriteRouteToConduct?: string,

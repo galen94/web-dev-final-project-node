@@ -115,4 +115,5 @@ export default class FollowController implements FollowControllerI {
     findFollowById = (req: Request, res: Response) =>
         FollowController.followDao.findFollowById(req.params.fid)
             .then(follows => res.json(follows));
+
 };
