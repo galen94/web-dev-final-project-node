@@ -9,4 +9,5 @@ export default interface PinnedStopDaoI {
     pinExistsAlready (routeType: string, routeId: string, stopId: string, userId: string): Promise<any>;
     pinStop (routeType: string, routeId: string, routeName: string, stopId: string, stopName: string, userId: string): Promise<PinnedStop>;
     unpinStop (pid: string): Promise<any>;
+    findAllUsersWhoPinnedStop(sid: string): Promise<PinnedStop[]>;
 };

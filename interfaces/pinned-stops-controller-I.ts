@@ -5,4 +5,5 @@ export default interface PinnedStopControllerI {
     findOnePinnedStopsByUser (req: Request, res: Response): void;
     pinStop (req: Request, res: Response): void;
     unpinStop (req: Request, res: Response): void;
+    findAllUsersWhoPinnedStop (req: Request, res: Response): void;
 };
