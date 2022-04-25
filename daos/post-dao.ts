@@ -16,6 +16,9 @@ export default class PostDao implements PostDaoI {
     private constructor() {}
 
 
+    findAllPosts = async (): Promise<Post[]> => {
+        return PostModel.find();
+    }
     findPostById = async (pid: string): Promise<any> => {
         return PostModel.findById(pid);
     }

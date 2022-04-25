@@ -8,7 +8,7 @@ const PostSchema = new mongoose.Schema({
         applauds: {type: Number, default: 0},
     },
     user: {type: Schema.Types.ObjectId, ref: "UserModel"},
-    timePosted: Date().toLocaleString()
+    timePosted: String
 }, {collection: 'posts'});
 
 export default PostSchema
