@@ -138,4 +138,3 @@ export default class PinnedStopsController implements PinnedStopsControllerI {
         res.json(usersWhoPinned);
     }
 }
-
