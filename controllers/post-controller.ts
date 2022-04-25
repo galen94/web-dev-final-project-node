@@ -35,7 +35,6 @@ export default class PostController implements PostControllerI {
     updateStats = (req: Request, res: Response) =>
         PostController.postDao.updateStats(req.params.pid, req.body).then(status => res.send(status));
 
-
     userDeletesAPost = (req: Request, res: Response) =>
         PostController.postDao.userDeletesAPost(req.params.pid).then(status => res.send(status));
 

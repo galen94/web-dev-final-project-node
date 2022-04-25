@@ -2,7 +2,7 @@
  * @file Declares Follow data type representing relationship between
  * users, as in user follows another user
  */
-import Commuter from "./commuter";
+import User from "./user";
 import mongoose from "mongoose";
 
 /**
@@ -12,7 +12,7 @@ import mongoose from "mongoose";
  */
 export default interface Follow {
     _id?: mongoose.Schema.Types.ObjectId,
-    user: Commuter,
-    follower: Commuter
+    user: User,
+    follower: User
 };
 

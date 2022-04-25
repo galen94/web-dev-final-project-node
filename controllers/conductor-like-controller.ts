@@ -3,14 +3,14 @@
  */
 import {Express, Request, Response} from "express";
 import ConductorLikeDao from "../daos/conductor-like-dao";
-import ConductorDao from "../daos/conductor-dao";
+import UserDao from "../daos/user-dao"
 
 /**
  * @class ConductorLikeController Implements RESTful Web service API for likes resource.
  */
 export default class ConductorLikeController {
     private static conductorLikeDao: ConductorLikeDao = ConductorLikeDao.getInstance();
-    private static conductorDao: ConductorDao = ConductorDao.getInstance();
+    private static UserDao: UserDao = UserDao.getInstance();
     private static conductorLikeController: ConductorLikeController | null = null;
     /**
      * Creates singleton controller like instance
@@ -76,7 +76,7 @@ export default class ConductorLikeController {
         const conid = req.params.conid;
         const comid = req.params.comid;
         const conductorLikeDao = ConductorLikeController.conductorLikeDao;
-        const conductorDao = ConductorLikeController.conductorDao;
+        const UserDao = ConductorLikeController.UserDao;
         // @ts-ignore
         const profile = req.session['profile'];
         const comId = comid && profile ?
@@ -86,7 +86,7 @@ export default class ConductorLikeController {
             const commuterAlreadyLikedConductor = await conductorLikeDao.findCommuterLikesConductor(comId, conid);
             const conductorLikesCount = await conductorLikeDao.countConductorLikes(conid);
 
-            let conductor = await conductorDao.findConductorById(conid);
+            let conductor = await UserDao.findUserById(conid);
             if (commuterAlreadyLikedConductor) {
                 await conductorLikeDao.unlikeConductor(comid, conid);
                 conductor.stats.likes = conductorLikesCount - 1;

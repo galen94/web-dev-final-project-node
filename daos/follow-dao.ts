@@ -95,4 +95,15 @@ export default class FollowDao implements FollowDaoI {
             .populate("user")
             .populate("follower")
             .exec();
+
+    /**
+     * Uses FollowModel to determine if this follow already exits in the collection.
+     * @param index index of the follow that is trying to be created.
+     * @returns Promise 0 if follow does not exits, 1 if it does.
+     */
+    findFollow = async (index: {}): Promise<number> => {
+        const result = FollowModel.find(index);
+        console.log(result);
+        return 0;
+    }
 }

@@ -9,5 +9,5 @@ export default interface Post {
         applauds: number,
     }
     user: User,
-    timePosted: string,
+    timePosted: Date,
 };

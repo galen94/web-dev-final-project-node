@@ -9,10 +9,10 @@ const UserSchema = new mongoose.Schema<User>({
     password: {type: String, required: true},
     name: {type: String, required: true},
     email: {type: String, required: true},
-    userRole: {type: String, enum: ["admin", "conductor", "commuter"]},
+    userRole: {type: String, enum: ["Admin", "Conductor", "Commuter"]},
     dateOfBirth: Date,
     homeStop: {type: String},
-    charlieCard: {type: Schema.Types.ObjectId, ref: "CharlieCardModel"},
+    charlieCardBalance: Number,
     yearsAtMBTA: Number,
     currentRouteConducting: String,
     favoriteRouteToConduct: String,
@@ -20,5 +20,3 @@ const UserSchema = new mongoose.Schema<User>({
 }, {collection: 'users'});
 
 export default UserSchema;
-
-

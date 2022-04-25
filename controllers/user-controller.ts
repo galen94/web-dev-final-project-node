@@ -34,11 +34,13 @@ export default class UserController implements UserControllerI {
         if(UserController.userController === null) {
             UserController.userController = new UserController();
 
+            app.get("/api/users", UserController.userController.findAllUsers);
             app.post("/api/users", UserController.userController.createUser);
             app.get("/api/users/:uid", UserController.userController.findUserById);
             app.put("/api/users/:uid", UserController.userController.updateUser);
             app.delete("/api/users/:uid", UserController.userController.deleteUser);
             app.get("/api/users/username/:username", UserController.userController.findUserByUsername);
+
         }
 
         return UserController.userController;
@@ -98,5 +100,8 @@ export default class UserController implements UserControllerI {
     findUserByUsername = (req: Request, res: Response) => {
         UserController.userDao.findUserByUsername(req.params.username).then((user: User) => res.json(user));
     }
-}
 
+    findAllUsers = (req: Request, res: Response) => {
+        UserController.userDao.findAllUsers().then((users: User[]) => res.json(users));
+    }
+}

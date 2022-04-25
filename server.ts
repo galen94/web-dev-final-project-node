@@ -20,8 +20,9 @@ import cors from "cors";
 const session = require("express-session");
 
 import UserController from './controllers/user-controller';
-import FollowController from "./controllers/follow-controller";
+import PinnedStopController from "./controllers/pinned-stops-controller";
 import AuthenticationController from "./controllers/authentication-controller";
+import FollowController from "./controllers/follow-controller";
 
 
 /**
@@ -85,8 +86,9 @@ app.get('/', (req: Request, res: Response) => {
  * Create RESTful Web service API
  */
 UserController.getInstance(app);
-//FollowController.getInstance(app);
+FollowController.getInstance(app);
 AuthenticationController(app);
+PinnedStopController.getInstance(app);
 
 
 /**

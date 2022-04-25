@@ -37,6 +37,12 @@ export default class UserDao implements UserDaoI {
     }
 
     /**
+     * Uses UserModel to retrieve all users from users collection
+     */
+    findAllUsers = async (): Promise<any> => {
+        return UserModel.find();}
+
+    /**
      * Uses UserModel to retrieve single user document from users collection
      * by their username
      * @param {string} username User's username
@@ -51,7 +57,8 @@ export default class UserDao implements UserDaoI {
      * @returns Promise To be notified when user is inserted into the database
      */
     createUser = async (user: User): Promise<User> => {
-        return UserModel.create(user);
+        const tempUser = UserModel.create(user);
+        return tempUser;
     }
 
     /**
@@ -73,4 +80,3 @@ export default class UserDao implements UserDaoI {
         return UserModel.deleteOne({_id: uid});
     }
 }
-
