@@ -13,7 +13,7 @@ const UserSchema = new mongoose.Schema<User>({
     dateOfBirth: Date,
     homeStop: {type: String},
     charlieCardBalance: Number,
-    yearsAtMBTA: Number,
+    dateJoined: Date,
     currentRouteConducting: String,
     favoriteRouteToConduct: String,
     jobTitle: String
