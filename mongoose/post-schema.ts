@@ -7,7 +7,7 @@ const PostSchema = new mongoose.Schema({
         likes: {type: Number, default: 0},
         applauds: {type: Number, default: 0},
     },
-    user: {type: Schema.Types.ObjectId, ref: "UserModel"},
+    user: String,
     timePosted: String
 }, {collection: 'posts'});
 

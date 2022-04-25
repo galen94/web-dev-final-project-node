@@ -8,6 +8,6 @@ export default interface Post {
         likes: number,
         applauds: number,
     }
-    poster: User,
+    user: User,
     timePosted: string,
 };
