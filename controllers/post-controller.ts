@@ -13,6 +13,7 @@ export default class PostController implements PostControllerI {
 
             app.post("/api/posts", PostController.postController.userPostsAPost);
             app.get("/api/posts/:pid", PostController.postController.findPostById);
+            app.get("/api/posts", PostController.postController.findAllPosts);
             app.put("/api/posts/:pid", PostController.postController.userUpdatesAPost);
             app.put("/api/posts/:pid", PostController.postController.updateStats);
             app.delete("/api/posts/:pid", PostController.postController.userDeletesAPost);
@@ -24,13 +25,15 @@ export default class PostController implements PostControllerI {
     private constructor() {}
 
 
+    findAllPosts = (req: Request, res: Response) =>
+        PostController.postDao.findAllPosts().then((post: Post[]) => res.json(post));
+
     findPostById = (req: Request, res: Response) =>
         PostController.postDao.findPostById(req.params.pid).then((post:Post) => res.json(post));
 
     // I'm unsure if this is correct
     updateStats = (req: Request, res: Response) =>
         PostController.postDao.updateStats(req.params.pid, req.body).then(status => res.send(status));
-
 
     userDeletesAPost = (req: Request, res: Response) =>
         PostController.postDao.userDeletesAPost(req.params.pid).then(status => res.send(status));
