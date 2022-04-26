@@ -23,6 +23,8 @@ import UserController from './controllers/user-controller';
 import PinnedStopController from "./controllers/pinned-stops-controller";
 import AuthenticationController from "./controllers/authentication-controller";
 import FollowController from "./controllers/follow-controller";
+import PostController from "./controllers/post-controller";
+
 
 
 /**
@@ -89,6 +91,8 @@ UserController.getInstance(app);
 FollowController.getInstance(app);
 AuthenticationController(app);
 PinnedStopController.getInstance(app);
+PostController.getInstance(app);
+
 
 
 /**

@@ -8,5 +8,6 @@ export default interface PostControllerI {
     updateStats(req: Request, res: Response): void;
     userDeletesAPost (req: Request, res: Response): void;
     findPostById (req: Request, res: Response): void;
+    findAllPostsByUser(req: Request, res: Response): void;
 
 }
