@@ -37,7 +37,7 @@ export default class FollowController implements FollowControllerI {
      * @return FollowController
      */
     public static getInstance = (app: Express): FollowController => {
-        if(FollowController.followController === null) {
+        if (FollowController.followController === null) {
             FollowController.followController = new FollowController();
             app.post("/api/users/:uid/follows/:uid2", FollowController.followController.followUser);
             app.delete("/api/follows/:fid", FollowController.followController.unfollowUser);
@@ -50,7 +50,8 @@ export default class FollowController implements FollowControllerI {
         return FollowController.followController;
     }
 
-    private constructor() {}
+    private constructor() {
+    }
 
     /**
      * To record when a user follows another user
@@ -136,7 +137,14 @@ export default class FollowController implements FollowControllerI {
         FollowController.followDao.findFollowById(req.params.fid)
             .then(follows => res.json(follows));
 
-    followExistsAlready = (req: Request, res: Response) =>
-        FollowController.followDao.followExistsAlready(req.params.uid,req.params.uid2)
+    followExistsAlready = (req: Request, res: Response) => {
+        // @ts-ignore
+        const fid = req.params.uid === "me" && req.session['profile'] ? req.session['profile']._id : req.params.uid;
+        if (fid === "me") {
+            res.sendStatus(503);
+            return;
+        }
+        FollowController.followDao.followExistsAlready(fid, req.params.uid2)
             .then(count => res.json(count));
-};
+    };
+}
