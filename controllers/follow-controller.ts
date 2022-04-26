@@ -70,6 +70,7 @@ export default class FollowController implements FollowControllerI {
         FollowController.followDao.followUser(fid, req.params.uid2)
             .then((follow: Follow) => res.json(follow));
     }
+
     /**
      * To delete a record of when a user follows another user
      * @param {Request} req Represents request from client, including the path
