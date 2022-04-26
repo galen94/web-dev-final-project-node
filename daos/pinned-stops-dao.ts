@@ -33,9 +33,8 @@ export default class PinnedStopDao implements PinnedStopDaoI {
     }
 
     findAllUsersWhoPinnedStop = async (sid: string): Promise<PinnedStop[]> => {
-        const users = PinnedStopModel.find({stopId: sid});
-        console.log(users)
-        return users;
+        const pins = PinnedStopModel.find({stopId: sid}).populate("pinnedBy");
+        return pins;
     }
 
 
@@ -52,7 +51,12 @@ export default class PinnedStopDao implements PinnedStopDaoI {
         return PinnedStopModel.create({ routeType: routeType, routeId: routeId, routeName: routeName, stopId: stopId, stopName: stopName, pinnedBy: userId});
     }
 
+
+    findAllPins = async (): Promise<PinnedStop[]> =>
+        PinnedStopModel.find().populate("pinnedBy");
+
     pinExistsAlready = async (routeType: string, routeId: string, stopId: string, userId: string): Promise<number> => {
-        return PinnedStopModel.findOne({routeType: routeType, routeId: routeId, stopId: stopId, userId: userId}).count();
+        const pin = await PinnedStopModel.findOne({routeType: routeType, routeId: routeId, stopId: stopId, pinnedBy: userId}).count();
+        return pin;
     }
 }

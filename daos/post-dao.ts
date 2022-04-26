@@ -16,16 +16,26 @@ export default class PostDao implements PostDaoI {
     private constructor() {}
 
 
+    findAllPosts = async (): Promise<Post[]> => {
+        return PostModel.find().populate("user");
+    }
+
+    findAllPostsByUser = async (uid: string): Promise<Post[]> => {
+        const posts = PostModel.find({user: uid}).populate("user");
+        console.log(posts)
+        return posts;
+    }
+
     findPostById = async (pid: string): Promise<any> => {
-        return PostModel.findById(pid);
+        return PostModel.findById(pid).populate("user");
     }
 
     userDeletesAPost = async (pid: string): Promise<any> => {
         return PostModel.deleteOne({_id: pid});
     }
 
-    userPostsAPost = async (post: Post): Promise<Post> => {
-        return PostModel.create(post);
+    userPostsAPost = async (uid: string, post: Post): Promise<Post> => {
+        return PostModel.create({...post, user: uid});
     }
 
     userUpdatesAPost = async (pid: string, post: Post): Promise<any> => {
