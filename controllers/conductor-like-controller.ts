@@ -4,6 +4,7 @@
 import {Express, Request, Response} from "express";
 import ConductorLikeDao from "../daos/conductor-like-dao";
 import UserDao from "../daos/user-dao"
+import ConductorLike from "../models/conductor-like";
 
 /**
  * @class ConductorLikeController Implements RESTful Web service API for likes resource.
@@ -18,17 +19,34 @@ export default class ConductorLikeController {
      * API
      * @return ConductorController
      */
+
     public static getInstance = (app: Express): ConductorLikeController => {
         if(ConductorLikeController.conductorLikeController === null) {
             ConductorLikeController.conductorLikeController = new ConductorLikeController();
-            app.get("/api/commuters/:comid/likesconductor", ConductorLikeController.conductorLikeController.findAllConductorsLikedByCommuter);
-            app.get("/api/conductors/:conid/likesconductor", ConductorLikeController.conductorLikeController.findAllCommutersThatLikedConductor);
-            app.put("/api/commuters/:comid/likesconductor/:conid", ConductorLikeController.conductorLikeController.commuterLikesConductor);
+            app.get("/api/commuters/:comid/conductorlikes/:conid", ConductorLikeController.conductorLikeController.likeExistsAlready)
+            app.get("/api/commuters/:comid/conductorlikes", ConductorLikeController.conductorLikeController.findAllConductorsLikedByCommuter);
+            app.get("/api/conductors/:conid/conductorlikes", ConductorLikeController.conductorLikeController.findAllCommutersThatLikedConductor);
+            app.post("/api/commuters/:comid/conductorlikes/:conid", ConductorLikeController.conductorLikeController.commuterLikesConductor);
+            app.delete("/api/conductorlikes/:cid", ConductorLikeController.conductorLikeController.commuterUnlikesConductor);
         }
         return ConductorLikeController.conductorLikeController;
     }
 
     private constructor() {}
+
+    likeExistsAlready = (req: Request, res: Response) => {
+        // @ts-ignore
+        const commuterId = req.params.comid === "me" && req.session['profile'] ? req.session['profile']._id : req.params.comid;
+        console.log(commuterId)
+
+        if(commuterId === "me"){
+            res.sendStatus(503);
+            return;
+        }
+        ConductorLikeController.conductorLikeDao.likeExistsAlready(req.params.conid, commuterId)
+            .then(count => res.json(count));
+    }
+
 
     /**
      * Retrieves all commuters that liked a conductor
@@ -37,9 +55,16 @@ export default class ConductorLikeController {
      * @param {Response} res Represents response to client, including the
      * body formatted as JSON arrays containing the commuters
      */
-    findAllCommutersThatLikedConductor = (req: Request, res: Response) =>
-        ConductorLikeController.conductorLikeDao.findAllCommutersThatLikedConductor(req.params.conid)
-            .then(conductorLikes => res.json(conductorLikes));
+    findAllCommutersThatLikedConductor = (req: Request, res: Response) => {
+        // @ts-ignore
+        const conductorId = req.params.conid === "me" && req.session['profile'] ? req.session['profile']._id : req.params.conid;
+        if(conductorId === "me"){
+            res.sendStatus(503);
+            return;
+        }
+        ConductorLikeController.conductorLikeDao.findAllCommutersThatLikedConductor(conductorId)
+            .then((conductorLikes: ConductorLike[]) => res.json(conductorLikes));
+    }
 
     /**
      * Retrieves all conductors liked by a commuter from the database
@@ -49,18 +74,14 @@ export default class ConductorLikeController {
      * body formatted as JSON arrays containing the conductors that were liked
      */
     findAllConductorsLikedByCommuter = (req: Request, res: Response) => {
-        const comid = req.params.comid;
         // @ts-ignore
-        const profile = req.session['profile'];
-        const comId = comid && profile ?
-            profile._id : comid;
-
-        ConductorLikeController.conductorLikeDao.findAllConductorsLikedByCommuter(comId)
-            .then(conductorLikes => {
-                const nonNullConductors = conductorLikes.filter(conductorLike => conductorLike.conductor);
-                const conductorsFromLikes = nonNullConductors.map(conductorLike => conductorLike.conductor);
-                res.json(conductorsFromLikes);
-            });
+        const commuterId = req.params.comid === "me" && req.session['profile'] ? req.session['profile']._id : req.params.comid;
+        if(commuterId === "me"){
+            res.sendStatus(503);
+            return;
+        }
+        ConductorLikeController.conductorLikeDao.findAllConductorsLikedByCommuter(commuterId)
+            .then((conductorLikes: ConductorLike[]) => res.json(conductorLikes));
     }
     /**
      *
@@ -71,34 +92,57 @@ export default class ConductorLikeController {
      * body formatted as JSON containing the new conductor likes that were inserted in the
      * database
      */
-
-    commuterLikesConductor = async (req: Request, res: Response) => {
-        const conid = req.params.conid;
-        const comid = req.params.comid;
-        const conductorLikeDao = ConductorLikeController.conductorLikeDao;
-        const UserDao = ConductorLikeController.UserDao;
+    commuterLikesConductor = (req: Request, res: Response) =>{
         // @ts-ignore
-        const profile = req.session['profile'];
-        const comId = comid && profile ?
-            profile._id : comid;
-
-        try {
-            const commuterAlreadyLikedConductor = await conductorLikeDao.findCommuterLikesConductor(comId, conid);
-            const conductorLikesCount = await conductorLikeDao.countConductorLikes(conid);
-
-            let conductor = await UserDao.findUserById(conid);
-            if (commuterAlreadyLikedConductor) {
-                await conductorLikeDao.unlikeConductor(comid, conid);
-                conductor.stats.likes = conductorLikesCount - 1;
-            } else {
-                await conductorLikeDao.likeConductor(comid, conid);
-                conductor.stats.likes = conductorLikesCount + 1;
-            }
-            res.sendStatus(200);
-        } catch (e) {
-            res.sendStatus(404);
+        const commuterId = req.params.comid === "me" && req.session['profile'] ? req.session['profile']._id : req.params.comid;
+        if(commuterId === "me"){
+            res.sendStatus(503);
+            return;
         }
+        ConductorLikeController.conductorLikeDao.likeConductor(req.params.conid, commuterId).then((conductorLike: ConductorLike) => res.json(conductorLike));
+
 
     }
+
+    commuterUnlikesConductor = (req: Request, res: Response) =>
+        ConductorLikeController.conductorLikeDao.unlikeConductor(req.params.cid).then(status => res.send(status));
+
+
+
+
+    // commuterLikesConductor = async (req: Request, res: Response) => {
+    //     // @ts-ignore
+    //     const userId = req.params.uid === "me" && req.session['profile'] ? req.session['profile']._id : req.params.uid;
+    //     if(userId === "me"){
+    //         res.sendStatus(503);
+    //         return;
+    //     }
+    //     const conid = req.params.conid;
+    //     const comid = req.params.comid;
+    //     const conductorLikeDao = ConductorLikeController.conductorLikeDao;
+    //     const UserDao = ConductorLikeController.UserDao;
+    //     // @ts-ignore
+    //     const profile = req.session['profile'];
+    //     const comId = comid && profile ?
+    //         profile._id : comid;
+    //
+    //     try {
+    //         const commuterAlreadyLikedConductor = await conductorLikeDao.findCommuterLikesConductor(comId, conid);
+    //         const conductorLikesCount = await conductorLikeDao.countConductorLikes(conid);
+    //
+    //         let conductor = await UserDao.findUserById(conid);
+    //         if (commuterAlreadyLikedConductor) {
+    //             await conductorLikeDao.unlikeConductor(comid, conid);
+    //             conductor.stats.likes = conductorLikesCount - 1;
+    //         } else {
+    //             await conductorLikeDao.likeConductor(comid, conid);
+    //             conductor.stats.likes = conductorLikesCount + 1;
+    //         }
+    //         res.sendStatus(200);
+    //     } catch (e) {
+    //         res.sendStatus(404);
+    //     }
+    //
+    // }
 
 };
