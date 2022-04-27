@@ -24,6 +24,8 @@ import PinnedStopController from "./controllers/pinned-stops-controller";
 import AuthenticationController from "./controllers/authentication-controller";
 import FollowController from "./controllers/follow-controller";
 import PostController from "./controllers/post-controller";
+import ConductorLikeController from "./controllers/conductor-like-controller";
+
 
 
 
@@ -92,6 +94,7 @@ FollowController.getInstance(app);
 AuthenticationController(app);
 PinnedStopController.getInstance(app);
 PostController.getInstance(app);
+ConductorLikeController.getInstance(app);
 
 
 

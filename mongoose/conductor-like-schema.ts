@@ -3,7 +3,7 @@
  */
 import mongoose, {Schema} from "mongoose";
 import ConductorLike from "../models/conductor-like"
-import UserModel from "./user-model";
+//import UserModel from "./user-model";
 
 const ConductorLikeSchema = new mongoose.Schema<ConductorLike>({
     conductor: {type: Schema.Types.ObjectId, ref: "UserModel", required: true},
