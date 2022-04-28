@@ -27,19 +27,6 @@ export default class FollowDao implements FollowDaoI {
     }
     private constructor() {}
 
-    /**
-     * Uses FollowModel to retrieve all follows documents from follows collection
-     * where the follower has the given uid
-     * @param uid, user id of user who follows others
-     * @returns Promise To be notified when the follows are retrieved from
-     * database
-     */
-    findAllUsersThatUserIsFollowing = async (uid: string): Promise<Follow[]> =>
-        FollowModel.find({follower: uid})
-            .populate("user")
-            .populate("follower")
-            .exec();
-
 
     /**
      * Uses FollowModel to retrieve all follows documents from follows collection
@@ -54,6 +41,11 @@ export default class FollowDao implements FollowDaoI {
             .populate("follower")
             .exec();
 
+    findAllFollowsByUser = async (uid: string): Promise<Follow[]> =>
+        FollowModel.find({follower: uid})
+            .populate("user")
+            .populate("follower")
+            .exec();
     /**
      * Inserts follows instance into the database
      * @param uid user who followed another
@@ -65,12 +57,11 @@ export default class FollowDao implements FollowDaoI {
 
     /**
      * Deletes follows instance into the database
-     * @param uid user who followed another
-     * @param uid2 user who was followed
      * @returns Promise To be notified when follow is deleted from the database
+     * @param fid follow id
      */
-    unfollowUser = async (uid: string, uid2: string): Promise<any> =>
-        FollowModel.deleteOne({follower: uid, user: uid2});
+    unfollowUser = async (fid: string): Promise<any> =>
+        FollowModel.deleteOne({_id: fid});
 
     /**
      * Uses FollowModel to retrieve all follows documents from follows collection
@@ -105,5 +96,10 @@ export default class FollowDao implements FollowDaoI {
         const result = FollowModel.find(index);
         console.log(result);
         return 0;
+    }
+
+
+    followExistsAlready = async (uid: string, uid2: string): Promise<number> => {
+        return FollowModel.findOne({user: uid, follower: uid2}).count();
     }
 }

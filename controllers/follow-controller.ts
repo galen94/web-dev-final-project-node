@@ -4,6 +4,7 @@
 import {Express, Request, Response} from "express";
 import FollowDao from "../daos/follow-dao";
 import FollowControllerI from "../interfaces/follow-controller-I";
+import Follow from "../models/follow";
 
 /**
  * @class FollowController Implements RESTful Web service API for follows resource.
@@ -36,19 +37,21 @@ export default class FollowController implements FollowControllerI {
      * @return FollowController
      */
     public static getInstance = (app: Express): FollowController => {
-        if(FollowController.followController === null) {
+        if (FollowController.followController === null) {
             FollowController.followController = new FollowController();
             app.post("/api/users/:uid/follows/:uid2", FollowController.followController.followUser);
-            app.delete("/api/users/:uid/unfollows/:uid2", FollowController.followController.unfollowUser);
-            app.get("/api/users/:uid/follows", FollowController.followController.findAllUsersThatUserIsFollowing);
-            app.get("/api/users/:uid/followedBy", FollowController.followController.findAllUserFollowers);
+            app.delete("/api/follows/:fid", FollowController.followController.unfollowUser);
+            app.get("/api/users/:uid/follows", FollowController.followController.findAllFollowsByUser);
+            app.get("/api/users/:uid/followers", FollowController.followController.findAllUserFollowers);
             app.get("/api/follows", FollowController.followController.findAllFollowsBetweenUsers);
             app.get("/api/follows/:fid", FollowController.followController.findFollowById);
+            app.get("/api/follows/:uid/:uid2", FollowController.followController.followExistsAlready);
         }
         return FollowController.followController;
     }
 
-    private constructor() {}
+    private constructor() {
+    }
 
     /**
      * To record when a user follows another user
@@ -57,9 +60,16 @@ export default class FollowController implements FollowControllerI {
      * @param {Response} res Represents response to client, including the
      * follow body in JSON format
      */
-    followUser = (req: Request, res: Response) =>
-        FollowController.followDao.followUser(req.params.uid, req.params.uid2)
-            .then(follows => res.json(follows));
+    followUser = (req: Request, res: Response) => {
+        // @ts-ignore
+        const fid = req.params.uid === "me" && req.session['profile'] ? req.session['profile']._id : req.params.uid;
+        if (fid === "me") {
+            res.sendStatus(503);
+            return;
+        }
+        FollowController.followDao.followUser(fid, req.params.uid2)
+            .then((follow: Follow) => res.json(follow));
+    }
 
     /**
      * To delete a record of when a user follows another user
@@ -68,8 +78,7 @@ export default class FollowController implements FollowControllerI {
      * @param {Response} res Represents response to client, delete status
      */
     unfollowUser = (req: Request, res: Response) =>
-        FollowController.followDao.unfollowUser(req.params.uid, req.params.uid2)
-            .then(status => res.send(status));
+        FollowController.followDao.unfollowUser(req.params.fid).then(status => res.send(status));
 
     /**
      * Retrieves all users that user is following from the database
@@ -79,10 +88,16 @@ export default class FollowController implements FollowControllerI {
      * body formatted as JSON arrays containing the follows objects where user uid
      * is the follower
      */
-    findAllUsersThatUserIsFollowing = (req: Request, res: Response) =>
-        FollowController.followDao.findAllUsersThatUserIsFollowing(req.params.uid)
-            .then(follows => res.json(follows));
-
+    findAllFollowsByUser = (req: Request, res: Response) => {
+        // @ts-ignore
+        const fid = req.params.uid === "me" && req.session['profile'] ? req.session['profile']._id : req.params.uid;
+        if (fid === "me") {
+            res.sendStatus(503);
+            return;
+        }
+        FollowController.followDao.findAllFollowsByUser(fid)
+            .then((follows: Follow[]) => res.json(follows));
+    }
     /**
      * Retrieves all users that follow the user from the database
      * @param {Request} req Represents request from client, including the path
@@ -91,9 +106,16 @@ export default class FollowController implements FollowControllerI {
      * body formatted as JSON arrays containing the follows objects where user uid
      * is the user
      */
-    findAllUserFollowers = (req: Request, res: Response) =>
-        FollowController.followDao.findAllUserFollowers(req.params.uid)
+    findAllUserFollowers = (req: Request, res: Response) => {
+        // @ts-ignore
+        const userId = req.params.uid === "me" && req.session['profile'] ? req.session['profile']._id : req.params.uid;
+        if (userId === "me") {
+            res.sendStatus(503);
+            return;
+        }
+        FollowController.followDao.findAllUserFollowers(userId)
             .then(follows => res.json(follows));
+    }
 
     /**
      * Retrieves all follows objects from the database
@@ -116,4 +138,14 @@ export default class FollowController implements FollowControllerI {
         FollowController.followDao.findFollowById(req.params.fid)
             .then(follows => res.json(follows));
 
-};
+    followExistsAlready = (req: Request, res: Response) => {
+        // @ts-ignore
+        const fid = req.params.uid === "me" && req.session['profile'] ? req.session['profile']._id : req.params.uid;
+        if (fid === "me") {
+            res.sendStatus(503);
+            return;
+        }
+        FollowController.followDao.followExistsAlready(fid, req.params.uid2)
+            .then(count => res.json(count));
+    };
+}
