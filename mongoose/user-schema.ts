@@ -14,8 +14,6 @@ const UserSchema = new mongoose.Schema<User>({
     homeStop: {type: String},
     charlieCardBalance: Number,
     dateJoined: Date,
-    currentRouteConducting: String,
-    favoriteRouteToConduct: String,
     jobTitle: String
 }, {collection: 'users'});
 
